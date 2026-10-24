@@ -1,81 +1,42 @@
-
-============================================
+========================================
  EV CHARGING STATION LOCATOR & AVAILABILITY
-============================================
+========================================
 1. Display all stations
 2. Search station by ID (Hash Table)
 3. Show available stations
 4. Recommend nearest available stations
 5. Find shortest route (Graph + Dijkstra)
 6. Update charger availability
-7. Exit
-Enter choice: 
----------------- EV CHARGING STATIONS ----------------
-ID      Station           Location        Free/Total  Power(kW)   
-------------------------------------------------------------------
-101     GreenCharge       Shivajinagar    3    /4      60.0        
-102     VoltPoint         Deccan          0    /4      50.0        
-103     EcoPlug           Kothrud         4    /5      120.0       
-104     PowerDrive        Swargate        2    /3      60.0        
-105     QuickCharge       Baner           1    /2      30.0        
-106     CityCharge        Aundh           2    /4      90.0        
+7. Add new charging station
+8. Exit
+Enter choice: 1
 
-============================================
- EV CHARGING STATION LOCATOR & AVAILABILITY
-============================================
-1. Display all stations
-2. Search station by ID (Hash Table)
-3. Show available stations
-4. Recommend nearest available stations
-5. Find shortest route (Graph + Dijkstra)
-6. Update charger availability
-7. Exit
-Enter choice: Enter the ID of your starting location/station: 
-Recommended stations (nearest reachable with free chargers):
-1. PowerDrive (Swargate)
-   Station ID: 104
-   Route distance: 3.2 km
-   Free chargers: 2
-   Charging power: 60.0 kW
-2. EcoPlug (Kothrud)
-   Station ID: 103
-   Route distance: 5.5 km
-   Free chargers: 4
-   Charging power: 120.0 kW
-3. CityCharge (Aundh)
-   Station ID: 106
-   Route distance: 6.5 km
-   Free chargers: 2
-   Charging power: 90.0 kW
-4. QuickCharge (Baner)
-   Station ID: 105
-   Route distance: 9.3 km
-   Free chargers: 1
-   Charging power: 30.0 kW
+-------------- EV CHARGING STATIONS --------------
+ID     Station        Location       Free/Total   Power(kW)
+----------------------------------------------------------
+101    GreenCharge    Shivajinagar   3/4          60.0
+102    VoltPoint      Deccan         0/4          50.0
+103    EcoPlug        Kothrud        4/5          120.0
+104    PowerDrive     Swargate       2/3          60.0
+105    QuickCharge    Baner          1/2          30.0
+106    CityCharge     Aundh          2/4          90.0
 
-============================================
- EV CHARGING STATION LOCATOR & AVAILABILITY
-============================================
-1. Display all stations
-2. Search station by ID (Hash Table)
-3. Show available stations
-4. Recommend nearest available stations
-5. Find shortest route (Graph + Dijkstra)
-6. Update charger availability
-7. Exit
-Enter choice: Enter starting station/location ID: Enter destination station/location ID: 
-Shortest route (based on sample road distances):
-Shivajinagar -> Aundh -> Baner
-Total distance: 9.3 km
+--- EXAMPLE: ADD A NEW CHARGING STATION ---
+Enter choice: 7
+Enter unique station ID: 107
+Enter station name: NewCharge
+Enter location: Pune Camp
+Enter total number of chargers: 3
+Enter available chargers (0 to 3): 2
+Enter charging power in kW: 90
 
-============================================
- EV CHARGING STATION LOCATOR & AVAILABILITY
-============================================
-1. Display all stations
-2. Search station by ID (Hash Table)
-3. Show available stations
-4. Recommend nearest available stations
-5. Find shortest route (Graph + Dijkstra)
-6. Update charger availability
-7. Exit
-Enter choice: Thank you for using the EV Charging Station Locator.
+Station added successfully.
+How many existing stations should this station connect to? (0 or more): 1
+Connection 1 - enter existing station ID: 101
+Enter road distance in km: 2.5
+Road connection added.
+New station is now available in station search and route calculations.
+Note: changes are stored in memory and reset when the program closes.
+
+Enter choice: 8
+Thank you for using the EV Charging Station Locator.
