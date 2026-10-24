@@ -26,12 +26,12 @@ struct CompareCandidate {
         return a.distance > b.distance;
     }
 };
-
 class EVChargingSystem {
 private:
     vector<Station> stations;
     vector<vector<Edge>> graph;
-    unordered_map<int, int> stationIndexById;
+    unordered_map<int, int> stationIndexById; // Hash table: station ID -> index
+
     int findIndexById(int id) const {
         auto it = stationIndexById.find(id);
         return it == stationIndexById.end() ? -1 : it->second;
@@ -173,6 +173,42 @@ public:
         cout << "\nTotal distance: " << fixed << setprecision(1) << dist[destination] << " km\n";
     }
 
+    void addNewStation() {
+        Station s{};
+        cout << "\n--- ADD NEW CHARGING STATION ---\n";
+        cout << "Enter unique station ID: ";
+        if (!(cin >> s.id)) { cin.clear(); cin.ignore(numeric_limits<streamsize>::max(), '\n'); cout << "Invalid ID.\n"; return; }
+        if (findIndexById(s.id) >= 0) { cout << "This station ID already exists. Use a unique ID.\n"; return; }
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+        cout << "Enter station name: "; getline(cin, s.name);
+        cout << "Enter location: "; getline(cin, s.location);
+        cout << "Enter total number of chargers: ";
+        if (!(cin >> s.totalChargers) || s.totalChargers <= 0) { cin.clear(); cin.ignore(numeric_limits<streamsize>::max(), '\n'); cout << "Total chargers must be greater than zero.\n"; return; }
+        cout << "Enter available chargers (0 to " << s.totalChargers << "): ";
+        if (!(cin >> s.availableChargers) || s.availableChargers < 0 || s.availableChargers > s.totalChargers) { cin.clear(); cin.ignore(numeric_limits<streamsize>::max(), '\n'); cout << "Invalid available charger count.\n"; return; }
+        cout << "Enter charging power in kW: ";
+        if (!(cin >> s.chargingRate) || s.chargingRate <= 0) { cin.clear(); cin.ignore(numeric_limits<streamsize>::max(), '\n'); cout << "Charging power must be greater than zero.\n"; return; }
+        int newIndex = static_cast<int>(stations.size());
+        stations.push_back(s); graph.push_back({}); stationIndexById[s.id] = newIndex;
+        cout << "\nStation added successfully.\n";
+        int links;
+        cout << "How many existing stations should this station connect to? ";
+        if (!(cin >> links) || links < 0) { cin.clear(); cin.ignore(numeric_limits<streamsize>::max(), '\n'); cout << "Station was added, but the number of road links was invalid.\n"; return; }
+        for (int j = 0; j < links; ++j) {
+            int otherId; double distance;
+            cout << "Connection " << (j + 1) << " - enter existing station ID: ";
+            if (!(cin >> otherId)) { cin.clear(); cin.ignore(numeric_limits<streamsize>::max(), '\n'); cout << "Invalid ID; connection skipped.\n"; continue; }
+            int otherIndex = findIndexById(otherId);
+            if (otherIndex < 0 || otherIndex == newIndex) { cout << "Unknown or invalid station ID; connection skipped.\n"; continue; }
+            cout << "Enter road distance in km: ";
+            if (!(cin >> distance) || distance <= 0) { cin.clear(); cin.ignore(numeric_limits<streamsize>::max(), '\n'); cout << "Distance must be positive; connection skipped.\n"; continue; }
+            graph[newIndex].push_back({otherIndex, distance}); graph[otherIndex].push_back({newIndex, distance});
+            cout << "Road connection added.\n";
+        }
+        cout << "New station is now available in station search and route calculations.\n";
+        cout << "Note: changes are stored in memory and reset when the program closes.\n";
+    }
+
     void updateAvailability() {
         int id, change;
         cout << "Enter station ID: "; cin >> id;
@@ -200,10 +236,11 @@ public:
                  << "4. Recommend nearest available stations\n"
                  << "5. Find shortest route (Graph + Dijkstra)\n"
                  << "6. Update charger availability\n"
-                 << "7. Exit\nEnter choice: ";
+                 << "7. Add new charging station\n"
+                 << "8. Exit\nEnter choice: ";
             if (!(cin >> choice)) {
                 cin.clear(); cin.ignore(numeric_limits<streamsize>::max(), '\n');
-                cout << "Please enter a number from 1 to 7.\n"; continue;
+                cout << "Please enter a number from 1 to 8.\n"; continue;
             }
             switch (choice) {
                 case 1: displayAllStations(); break;
@@ -212,10 +249,11 @@ public:
                 case 4: recommendStations(); break;
                 case 5: findShortestRoute(); break;
                 case 6: updateAvailability(); break;
-                case 7: cout << "Thank you for using the EV Charging Station Locator.\n"; break;
-                default: cout << "Invalid choice. Please select 1 to 7.\n";
+                case 7: addNewStation(); break;
+                case 8: cout << "Thank you for using the EV Charging Station Locator.\n"; break;
+                default: cout << "Invalid choice. Please select 1 to 8.\n";
             }
-        } while (choice != 7);
+        } while (choice != 8);
     }
 };
 
